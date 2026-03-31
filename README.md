@@ -1,2 +1,232 @@
-# -GUI-
+# 选课系统
 学生可以登录进行选课(只能选一堂课)，管理员可以对学生的信息进行修改，删除，查找，浏览。
+import pandas as pd
+students={'学号':[],'密码':[]}
+managers={'账号':[],'密码':[]}
+students_information={'姓名':[],'年级':[],'班级':[],'学号':[],'选课课程':[]}
+lessons=['人工智能','中医','医用英语','劳动通论']
+def choice_info():
+    """选择管理员还是学生？"""
+    print("1.管理员")
+    print("2.学生")
+    print("3.退出")
+def students_enter_and_set_info():
+    """学生登录注册系统"""
+    print("登录(0)或者注册(1)或者退出界面(2)")
+    choice2=int(input("回答(0或1或2):"))
+    def students_enter_info():
+        """学生登录界面"""
+        print("------登录------")
+        student_id=input("请输入你的学号:")
+        student_password=input("请输入密码:")
+        if ((student_id not in students['学号']) or (student_password not in students['密码'])):
+            if student_id not in students['学号']:
+                print("你输入的学号有误！")
+                students_enter_info()
+            elif student_password not in students['密码']:
+                print("你输入的密码错误！")
+                students_enter_info()
+        else:
+            students_choice()
+    def students_set_info():
+        """注册界面"""
+        print("------注册------")
+        new_id = input("请输入你的学号:")
+        new_password=input("请设置新密码：")
+        global students
+        students['学号'].append(new_id)
+        students['密码'].append(new_password)
+        students_enter_info()
+    if choice2==0:
+        students_enter_info()
+    elif choice2==1:
+        students_set_info()
+    elif choice2==2:
+        exit_info1=input("是否退出界面？yes or no:")
+        if exit_info1=='yes':
+            choice_info()
+        else:
+            students_set_info()
+    else:
+        print("你输入的序号错误！")
+        students_enter_and_set_info()
+def students_choice():
+    """学生选课系统"""
+    print(lessons)
+    lessons_choice = input("请选择你想要上的课程:")
+    students_name=input("请输入你的姓名:")
+    students_grade=input("请输入你的年级:")
+    students_class=input("请输入你的班级:")
+    students_id=input("请输入你的学号:")
+    global students_information
+    if lessons_choice in lessons:
+        students_information['姓名'].append(students_name)
+        students_information['年级'].append(students_grade)
+        students_information['班级'].append(students_class)
+        students_information['学号'].append(students_id)
+        students_information['选课课程'].append(lessons_choice)
+        df1=pd.DataFrame(students_information)
+        df1.to_csv("学生信息.csv")
+        df10=df1[df1['姓名']==students_name]
+        print(df10)
+    else:
+        print("该课程不存在！")
+        students_choice()
+    exit1_info=input("是否退出？yes or no:")
+    if exit1_info=='yes':
+        students_enter_and_set_info()
+    else:
+        students_choice()
+def managers_enter_and_set_info():
+    """管理者界面"""
+    print("登录(0)或者注册(1)或者退出界面(2)")
+    choice2 = int(input("回答(0或1或2):"))
+    def managers_enter_info():
+        """管理者登录界面"""
+        print("------登录------")
+        manager_id = input("请输入你的账号:")
+        manager_password = input("请输入密码:")
+        if ((manager_id not in managers['账号']) or (manager_password not in managers['密码'])):
+            if manager_id not in students['学号']:
+                print("你输入的账号有误！")
+                managers_enter_info()
+            elif manager_password not in students['密码']:
+                print("你输入的密码错误！")
+                managers_enter_info()
+        else:
+            managers_choice()
+    def managers_set_info():
+        """注册界面"""
+        print("------注册------")
+        new_id = input("请输入你的账号:")
+        new_password = input("请设置新密码：")
+        global students
+        managers['账号'].append(new_id)
+        managers['密码'].append(new_password)
+        managers_enter_info()
+    if choice2 == 0:
+        managers_enter_info()
+    elif choice2 == 1:
+        managers_set_info()
+    elif choice2 == 2:
+        exit_info1 = input("是否退出界面？yes or no:")
+        if exit_info1 == 'yes':
+            choice_info()
+        else:
+            managers_set_info()
+    else:
+        print("你输入的序号错误！")
+        managers_enter_and_set_info()
+def managers_choice():
+    """管理者界面"""
+    def user_info():
+        """管理者功能界面"""
+        print("------请选择功能(填写序号)------")
+        print("1.浏览学生信息")
+        print("2.删除学生")
+        print("3.修改学生信息")
+        print("4.查找学生")
+        print("5.退出系统")
+    def show_info():
+        """管理者浏览界面"""
+        global students_information
+        df1=pd.DataFrame(students_information)
+        df1.to_csv("学生信息.csv")
+        print(df1)
+    def del_info():
+        """管理者删除学生界面"""
+        del_name=input("请输入要删除的学生姓名:")
+        del_grade=input("请输入要删除的学生的年级:")
+        del_class=input("请输入要删除的学生的班级:")
+        del_id=input("请输入要删除的学生的学号:")
+        del_lesson=input("请输入要删除的学生的课程:")
+        global students_information
+        if (del_name not in students_information['姓名']) or (del_grade not in students_information['年级']) or (del_class not in students_information['班级']) or (del_id not in students_information['学号']) or (del_lesson not in students_information['选课课程']):
+            if del_name not in students_information['姓名']:
+                print("姓名错误!")
+            elif del_grade not in students_information['年级']:
+                print("年级错误!")
+            elif del_class not in students_information['班级']:
+                print("班级错误!")
+            elif del_id not in students_information['学号']:
+                print("学号错误!")
+            elif del_lesson not in students_information['选课课程']:
+                print("课程错误!")
+        else:
+            students_information['姓名'].remove(del_name)
+            students_information['年级'].remove(del_grade)
+            students_information['班级'].remove(del_class)
+            students_information['学号'].remove(del_id)
+            students_information['选课课程'].remove(del_lesson)
+            df1=pd.DataFrame(students_information)
+            df1.to_csv("学生信息.csv")
+            print(df1)
+    def modify_info():
+        """管理者修改学生信息界面"""
+        global students_information
+        print("------请输入修改前学生信息------")
+        modify_name = input("请输入要修改的学生姓名:")
+        modify_grade = input("请输入要修改前的学生的年级:")
+        modify_class = input("请输入要修改前的学生的班级:")
+        modify_id = input("请输入要修改前的学生的学号:")
+        modify_lesson = input("请输入要修改前的学生的课程:")
+        if modify_name not in students_information:
+            print("该学生不存在！")
+        else:
+            students_information['姓名'].remove(modify_name)
+            students_information['年级'].remove(modify_grade)
+            students_information['班级'].remove(modify_class)
+            students_information['学号'].remove(modify_id)
+            students_information['选课课程'].remove(modify_lesson)
+            print("------请修改学生信息！------")
+            modify1_name = input("请输入修改后的学生的姓名:")
+            modify1_grade = input("请输入要修改的学生的年级:")
+            modify1_class = input("请输入要修改的学生的班级:")
+            modify1_id = input("请输入要修改的学生的学号:")
+            modify1_lesson = input("请输入要删除的学生的课程:")
+            students_information['姓名'].append(modify1_name)
+            students_information['年级'].append(modify1_grade)
+            students_information['班级'].append(modify1_class)
+            students_information['学号'].append(modify1_id)
+            students_information['选课课程'].append(modify1_lesson)
+            df1=pd.DataFrame(students_information)
+            df1.to_csv("学生信息.csv")
+            print(df1)
+    def search_info():
+        """管理者查找学生界面"""
+        search_name=input("请输入要查找的学生姓名:")
+        df1=pd.DataFrame(students_information)
+        df1.to_csv("学生信息.csv")
+        df10=df1[df1['姓名']==search_name]
+        print(df10)
+    while True:
+        user_info()
+        abi=int(input("请输入功能序号:"))
+        if abi==1:
+            show_info()
+        elif abi==2:
+            del_info()
+        elif abi==3:
+            modify_info()
+        elif abi==4:
+            search_info()
+        elif abi==5:
+            exit2=input("是否退出？yes or no？")
+            if exit2=='yes':
+                managers_enter_and_set_info()
+            else:
+                managers_choice()
+while True:
+    """执行流程"""
+    choice_info()
+    choice0=int(input("请选择序号:"))
+    if choice0==1:
+        managers_enter_and_set_info()
+    elif choice0==2:
+        students_enter_and_set_info()
+    elif choice0==3:
+        exit3 = input("是否退出？yes or no？")
+        if exit3 == 'yes':
+            break
+        else:
+            choice_info()
