@@ -211,7 +211,7 @@ def managers_choice():
         elif abi==5:
             exit2=input("是否退出？yes or no？")
             if exit2=='yes':
-                managers_enter_and_set_info()
+                choice_info()
             else:
                 managers_choice()
 while True:
